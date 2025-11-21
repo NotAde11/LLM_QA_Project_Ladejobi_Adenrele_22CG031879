@@ -1,0 +1,15 @@
+# Copy this file to .env and fill in your actual API keys
+
+# API Configuration
+# Choose one: 'openai' or 'groq'
+API_TYPE=openai
+
+# OpenAI API Key (if using OpenAI)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Groq API Key (if using Groq - free and fast alternative)
+GROQ_API_KEY=your_groq_api_key_here
+
+# Port (optional, defaults to 5000)
+PORT=5000
+

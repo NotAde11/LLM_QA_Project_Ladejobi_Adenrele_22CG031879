@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Q&A System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 LLM Question & Answer System</h1>
+            <p>Ask any question and get AI-powered answers</p>
+        </header>
+
+        <div class="main-content">
+            <div class="input-section">
+                <textarea 
+                    id="questionInput" 
+                    placeholder="Enter your question here..."
+                    rows="4"
+                ></textarea>
+                <button id="askButton" onclick="askQuestion()">
+                    <span id="buttonText">Ask Question</span>
+                    <span id="buttonLoader" class="loader hidden"></span>
+                </button>
+            </div>
+
+            <div id="resultsSection" class="results-section hidden">
+                <div class="result-card">
+                    <h3>📝 Original Question</h3>
+                    <p id="originalQuestion" class="result-text"></p>
+                </div>
+
+                <div class="result-card">
+                    <h3>🔧 Processed Question</h3>
+                    <p id="processedQuestion" class="result-text"></p>
+                </div>
+
+                <div class="result-card">
+                    <h3>🔤 Tokens</h3>
+                    <div id="tokens" class="tokens-container"></div>
+                </div>
+
+                <div class="result-card answer-card">
+                    <h3>💡 Answer</h3>
+                    <p id="answer" class="result-text answer-text"></p>
+                </div>
+            </div>
+
+            <div id="errorSection" class="error-section hidden">
+                <p id="errorMessage"></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>CSC415/CSC331 - Artificial Intelligence Project</p>
+        </footer>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const questionInput = document.getElementById('questionInput');
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                showError('Please enter a question');
+                return;
+            }
+
+            // Show loading state
+            setLoading(true);
+            hideError();
+            hideResults();
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    showError(data.error || 'An error occurred');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function displayResults(data) {
+            // Display original question
+            document.getElementById('originalQuestion').textContent = data.original_question;
+            
+            // Display processed question
+            document.getElementById('processedQuestion').textContent = data.processed_question;
+            
+            // Display tokens
+            const tokensContainer = document.getElementById('tokens');
+            tokensContainer.innerHTML = '';
+            data.tokens.forEach(token => {
+                const tokenSpan = document.createElement('span');
+                tokenSpan.className = 'token';
+                tokenSpan.textContent = token;
+                tokensContainer.appendChild(tokenSpan);
+            });
+            
+            // Display answer
+            document.getElementById('answer').textContent = data.answer;
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorSection').classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('errorSection').classList.add('hidden');
+        }
+
+        function hideResults() {
+            document.getElementById('resultsSection').classList.add('hidden');
+        }
+
+        function setLoading(isLoading) {
+            const button = document.getElementById('askButton');
+            const buttonText = document.getElementById('buttonText');
+            const buttonLoader = document.getElementById('buttonLoader');
+            
+            if (isLoading) {
+                button.disabled = true;
+                buttonText.classList.add('hidden');
+                buttonLoader.classList.remove('hidden');
+            } else {
+                button.disabled = false;
+                buttonText.classList.remove('hidden');
+                buttonLoader.classList.add('hidden');
+            }
+        }
+
+        // Allow Enter key to submit (with Shift+Enter for new line)
+        document.getElementById('questionInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                askQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
+

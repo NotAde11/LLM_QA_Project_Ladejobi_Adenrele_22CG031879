@@ -1,0 +1,79 @@
+Name: Ladejobi Adenrele
+Matric Number: 22CG031879
+Live URL: [Your Render.com deployment URL - e.g., https://your-app-name.onrender.com]
+GitHub Repository: [Your GitHub repository URL - e.g., https://github.com/yourusername/LLM_QA_Project_YourName_MatricNo]
+
+================================================================================
+DEPLOYMENT INSTRUCTIONS FOR RENDER.COM
+================================================================================
+
+1. Push your code to GitHub:
+   - Create a new repository on GitHub
+   - Initialize git in your project folder:
+     git init
+     git add .
+     git commit -m "Initial commit"
+   - Add remote and push:
+     git remote add origin <your-github-repo-url>
+     git push -u origin main
+
+2. Deploy on Render.com:
+   - Go to https://render.com and sign up/login
+   - Click "New +" and select "Web Service"
+   - Connect your GitHub repository
+   - Configure the service:
+     * Name: llm-qa-system (or any name you prefer)
+     * Environment: Python 3
+     * Build Command: pip install -r requirements.txt
+     * Start Command: gunicorn app:app
+     * Instance Type: Free
+   
+3. Set Environment Variables on Render:
+   - In your Render service dashboard, go to "Environment"
+   - Add these variables:
+     * API_TYPE = openai (or groq)
+     * OPENAI_API_KEY = your_actual_api_key (if using OpenAI)
+     * GROQ_API_KEY = your_actual_api_key (if using Groq)
+   
+4. Deploy:
+   - Click "Create Web Service"
+   - Wait for deployment to complete
+   - Copy the deployment URL and update this file
+
+================================================================================
+HOW TO GET API KEYS
+================================================================================
+
+OPTION 1 - OpenAI (Paid):
+1. Go to https://platform.openai.com/
+2. Sign up and add payment method
+3. Navigate to API Keys section
+4. Create new secret key
+5. Copy the key and use it as OPENAI_API_KEY
+
+OPTION 2 - Groq (Free & Fast):
+1. Go to https://console.groq.com/
+2. Sign up for free account
+3. Navigate to API Keys
+4. Create new API key
+5. Copy the key and use it as GROQ_API_KEY
+6. Set API_TYPE=groq in environment variables
+
+================================================================================
+TESTING LOCALLY
+================================================================================
+
+1. Create a .env file in the project root with:
+   API_TYPE=openai
+   OPENAI_API_KEY=your_key_here
+
+2. Install dependencies:
+   pip install -r requirements.txt
+
+3. Run the Flask app:
+   python app.py
+
+4. Run the CLI app:
+   python LLM_QA_CLI.py
+
+5. Open browser at: http://localhost:5000
