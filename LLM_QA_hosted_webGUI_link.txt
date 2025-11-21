@@ -1,7 +1,7 @@
 Name: Ladejobi Adenrele
 Matric Number: 22CG031879
-Live URL: [Your Render.com deployment URL - e.g., https://your-app-name.onrender.com]
-GitHub Repository: [Your GitHub repository URL - e.g., https://github.com/yourusername/LLM_QA_Project_YourName_MatricNo]
+Live URL: https://llm-qa-project-ladejobi-adenrele.onrender.com
+GitHub Repository: https://github.com/NotAde11/LLM_QA_Project_Ladejobi_Adenrele_22CG031879
 
 ================================================================================
 DEPLOYMENT INSTRUCTIONS FOR RENDER.COM
